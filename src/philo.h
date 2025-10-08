@@ -40,6 +40,7 @@ typedef struct s_philo
 	long			last_meal;
 	int				meals_eaten;
 	pthread_t		thread;
+	pthread_mutex_t	meal_mutex;
 	t_simu			*simu;
 }	t_philo;
 
@@ -51,6 +52,7 @@ typedef struct s_simu
 	long			time_to_sleep;
 	int				stop;
 	long			start_time;
+	pthread_mutex_t	stop_simu;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_mutex;
 	t_philo			*philos;
@@ -62,6 +64,18 @@ void	gc_destroy(t_gc *gc);
 void	*gc_malloc(t_gc *gc, size_t size);
 t_gc	*gc_new(void);
 t_gcnode	*new_node(void *ptr);
+
+
+void	ft_eat(t_philo *philo);
+void	ft_sleep(t_philo *philo);
+void	ft_die_check(t_philo *philo);
+void	ft_think(t_philo *philo);
+void	*routine(void *arg);
+void	thread_launch(t_simu *simu);
+long	get_time_ms(void);
+
+int		init_forks(t_simu *simu);
+int		init_args(t_simu *simu, char **argv, int argc);
 
 int		all_number(int argc, char **argv);
 long	ft_atol(char *s);

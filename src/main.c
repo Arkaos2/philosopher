@@ -14,12 +14,21 @@
 
 int main(int argc, char **argv)
 {
-	t_simu simu;
+	t_simu *simu;
 	t_gc gc;
 
 	if (argc != 5 && argc != 6)
+	{
+		printf("Usage: ./philo nb_philo time_to_die time_to_eat time_to_sleep [nb_meals]\n");
 		return (-1);
-	simu.gc = gc_new();
-	init_args(simu, argv);
-
+	}
+	simu = malloc(sizeof(t_simu));
+	if (!simu)
+		return (-1);
+	simu->gc = gc_new();
+	if (init_args(simu, argv, argc) == -1)
+		return (-1);
+	simu->start_time = get_time_ms();
+	thread_launch(simu);
+	return(0);
 }

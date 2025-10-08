@@ -70,24 +70,24 @@ void	gc_destroy(t_gc *gc)
 	free(gc);
 }
 
-char	*gc_strdup(t_gc *gc, const char *s)
-{
-	size_t	len;
-	char	*dup;
-	size_t	i;
+// char	*gc_strdup(t_gc *gc, const char *s)
+// {
+// 	size_t	len;
+// 	char	*dup;
+// 	size_t	i;
 
-	if (!s)
-		return (NULL);
-	len = ft_strlen(s);
-	dup = gc_malloc(gc, len + 1);
-	if (!dup)
-		return (NULL);
-	i = 0;
-	while (i < len)
-	{
-		dup[i] = s[i];
-		i++;
-	}
-	dup[i] = '\0';
-	return (dup);
-}
+// 	if (!s)
+// 		return (NULL);
+// 	len = ft_strlen(s);
+// 	dup = gc_malloc(gc, len + 1);
+// 	if (!dup)
+// 		return (NULL);
+// 	i = 0;
+// 	while (i < len)
+// 	{
+// 		dup[i] = s[i];
+// 		i++;
+// 	}
+// 	dup[i] = '\0';
+// 	return (dup);
+// }

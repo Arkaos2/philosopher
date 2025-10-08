@@ -41,16 +41,34 @@ long	ft_atol(char *s)
 	while(s[i])
 	{
 		res *= 10;
-		res += res - '0';
+		res += s[i] - '0';
+		i++;
 	}
 	return (res);
 }
 
-int	init_args(t_simu *simu, char **argv)
+int	init_forks(t_simu *simu)
 {
 	int	i;
 
-	if(!all_number)
+	i = 0;
+	simu->forks = gc_malloc(simu->gc, sizeof(pthread_mutex_t) * simu->nb_philo);
+	if (!simu->forks)
+		return (-1);
+	while(i < simu->nb_philo)
+	{
+		pthread_mutex_init(&simu->forks[i], NULL);
+		i++;
+	}
+	pthread_mutex_init(&simu->print_mutex, NULL);
+	return (0);
+}
+
+int	init_args(t_simu *simu, char **argv, int argc)
+{
+	int	i;
+
+	if(!all_number(argc, argv))
 	{
 		printf("Argument Invalide\n");
 		return (-1);
@@ -60,10 +78,9 @@ int	init_args(t_simu *simu, char **argv)
 	simu->time_to_die = ft_atol(argv[2]);
 	simu->time_to_eat = ft_atol(argv[3]);
 	simu->time_to_sleep = ft_atol(argv[4]);
-	//a pas oublier de free
 	simu->philos = gc_malloc(simu->gc, sizeof(t_philo) * simu->nb_philo);
 	if (!simu->philos)
-		return ;
+		return (-1);
 	while (i < simu->nb_philo)
 	{
 		simu->philos[i].id = i;
@@ -72,22 +89,6 @@ int	init_args(t_simu *simu, char **argv)
 		simu->philos[i].simu = simu;
 		i++;
 	}
+	init_forks(simu);
 	return (0);
-}
-
-void init_forks(t_simu *simu)
-{
-	int	i;
-
-	i = 0;
-	//a pas oublier de free
-	simu->forks = gc_malloc(simu->gc, sizeof(pthread_mutex_t) * simu->nb_philo);
-	if (!simu->forks)
-		return;
-	while(i < simu->nb_philo)
-	{
-		pthread_mutex_init(&simu->forks[i], NULL);
-		i++;
-	}
-	pthread_mutex_init(&simu->print_mutex, NULL);
 }
