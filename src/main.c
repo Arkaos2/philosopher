@@ -6,16 +6,59 @@
 /*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 18:23:11 by saibelab          #+#    #+#             */
-/*   Updated: 2025/10/06 16:21:59 by saibelab         ###   ########.fr       */
+/*   Updated: 2025/10/08 16:20:56 by saibelab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+void	*monitor(void *arg)
+{
+	t_simu	*simu;
+	int		i;
+
+	simu = (t_simu *)arg;
+	while (!check_stop(simu))
+	{
+		i = 0;
+		while (i < simu->nb_philo && !check_stop(simu))
+		{
+			if (check_philo_death(simu, i))
+				return (NULL);
+			i++;
+		}
+		usleep(1000);
+	}
+	return (NULL);
+}
+
+void	thread_launch(t_simu *simu)
+{
+	int	i;
+	pthread_t	monitor_thread;
+
+	simu->start_time = get_time_ms();
+	i = 0;
+	while (i < simu->nb_philo)
+	{
+		simu->philos[i].last_meal = simu->start_time;
+		pthread_create(&simu->philos[i].thread, NULL, routine, &simu->philos[i]);
+		i++;
+	}
+	pthread_create(&monitor_thread, NULL, monitor, simu);
+	i = 0;
+	while (i < simu->nb_philo)
+	{
+		pthread_join(simu->philos[i].thread, NULL);
+		i++;
+	}
+	pthread_join(monitor_thread, NULL);
+}
+
 int main(int argc, char **argv)
 {
 	t_simu *simu;
-	t_gc gc;
+	t_gc *gc;
 
 	if (argc != 5 && argc != 6)
 	{
@@ -25,10 +68,17 @@ int main(int argc, char **argv)
 	simu = malloc(sizeof(t_simu));
 	if (!simu)
 		return (-1);
-	simu->gc = gc_new();
+	gc = gc_new();
+	simu->gc = gc;
 	if (init_args(simu, argv, argc) == -1)
+	{
+		free(simu);
+		gc_destroy(gc);
 		return (-1);
-	simu->start_time = get_time_ms();
+	}
 	thread_launch(simu);
+	destroy_mutexes(simu);
+	free(simu);
+	gc_destroy(gc);
 	return(0);
 }

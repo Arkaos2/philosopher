@@ -6,7 +6,7 @@
 /*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 17:37:01 by saibelab          #+#    #+#             */
-/*   Updated: 2025/10/06 16:19:34 by saibelab         ###   ########.fr       */
+/*   Updated: 2025/10/08 16:28:17 by saibelab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,26 +59,40 @@ typedef struct s_simu
 	t_gc			*gc;
 }	t_simu;
 
-char	*gc_strdup(t_gc *gc, const char *s);
-void	gc_destroy(t_gc *gc);
-void	*gc_malloc(t_gc *gc, size_t size);
-t_gc	*gc_new(void);
+char		*gc_strdup(t_gc *gc, const char *s);
+void		gc_destroy(t_gc *gc);
+void		*gc_malloc(t_gc *gc, size_t size);
+t_gc		*gc_new(void);
 t_gcnode	*new_node(void *ptr);
 
+void		ft_eat(t_philo *philo);
+void		ft_sleep(t_philo *philo);
+void		ft_think(t_philo *philo);
+void		*routine(void *arg);
+void		thread_launch(t_simu *simu);
+void		*monitor(void *arg);
 
-void	ft_eat(t_philo *philo);
-void	ft_sleep(t_philo *philo);
-void	ft_die_check(t_philo *philo);
-void	ft_think(t_philo *philo);
-void	*routine(void *arg);
-void	thread_launch(t_simu *simu);
-long	get_time_ms(void);
+void		ft_get_forks(t_philo *philo, int *first, int *second);
+int			ft_take_forks(t_philo *philo, int first, int second);
 
-int		init_forks(t_simu *simu);
-int		init_args(t_simu *simu, char **argv, int argc);
+long		get_time_ms(void);
+long		get_rel_time(t_simu *simu);
+void		ft_print(t_philo *philo, char *msg);
+int			ft_is_stopped(t_philo *philo);
+void		handle_single_philo(t_philo *philo);
 
-int		all_number(int argc, char **argv);
-long	ft_atol(char *s);
+int			check_stop(t_simu *simu);
+int			check_philo_death(t_simu *simu, int i);
+void		handle_death(t_simu *simu, int i);
+void		ft_die_check(t_philo *philo);
+
+int			init_forks(t_simu *simu);
+int			init_args(t_simu *simu, char **argv, int argc);
+int			all_number(int argc, char **argv);
+long		ft_atol(char *s);
+
+void		destroy_mutexes(t_simu *simu);
+void		ft_print(t_philo *philo, char *msg);
 
 #endif
 

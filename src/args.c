@@ -6,7 +6,7 @@
 /*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 17:38:27 by saibelab          #+#    #+#             */
-/*   Updated: 2025/10/06 16:19:47 by saibelab         ###   ########.fr       */
+/*   Updated: 2025/10/08 15:40:55 by saibelab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,14 @@ int	init_forks(t_simu *simu)
 		i++;
 	}
 	pthread_mutex_init(&simu->print_mutex, NULL);
+	pthread_mutex_init(&simu->stop_simu, NULL);
+	i = 0;
+	while (i < simu->nb_philo)
+	{
+		pthread_mutex_init(&simu->philos[i].meal_mutex, NULL);
+		i++;
+	}
+
 	return (0);
 }
 
@@ -78,13 +86,19 @@ int	init_args(t_simu *simu, char **argv, int argc)
 	simu->time_to_die = ft_atol(argv[2]);
 	simu->time_to_eat = ft_atol(argv[3]);
 	simu->time_to_sleep = ft_atol(argv[4]);
+	if (simu->nb_philo <= 0 || simu->time_to_die <= 0 ||
+		simu->time_to_eat <= 0 || simu->time_to_sleep <= 0)
+	{
+		printf("Arguments invalides: valeurs doivent être positives\n");
+		return (-1);
+	}
+	simu->stop = 0;
 	simu->philos = gc_malloc(simu->gc, sizeof(t_philo) * simu->nb_philo);
 	if (!simu->philos)
 		return (-1);
 	while (i < simu->nb_philo)
 	{
 		simu->philos[i].id = i;
-		simu->philos[i].last_meal = 0;
 		simu->philos[i].meals_eaten = 0;
 		simu->philos[i].simu = simu;
 		i++;
