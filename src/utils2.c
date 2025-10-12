@@ -46,6 +46,7 @@ void	handle_death(t_simu *simu, int i)
 		printf("%ld %d died\n", get_rel_time(simu), simu->philos[i].id + 1);
 		pthread_mutex_unlock(&simu->print_mutex);
 	}
+	exit(EXIT_SUCCESS);
 }
 
 int	check_philo_death(t_simu *simu, int i)
