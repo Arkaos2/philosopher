@@ -6,7 +6,7 @@
 /*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 17:37:01 by saibelab          #+#    #+#             */
-/*   Updated: 2025/10/13 15:49:20 by saibelab         ###   ########.fr       */
+/*   Updated: 2025/10/13 15:56:48 by saibelab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,16 @@ typedef struct s_gc
 }				t_gc;
 
 typedef struct s_simu	t_simu;
+
+typedef struct s_philo
+{
+	int				id;
+	long			last_meal;
+	int				meals_eaten;
+	pthread_t		thread;
+	pthread_mutex_t	meal_mutex;
+	t_simu			*simu;
+}	t_philo;
 
 typedef struct s_simu
 {
