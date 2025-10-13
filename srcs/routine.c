@@ -6,7 +6,7 @@
 /*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/06 15:44:02 by saibelab          #+#    #+#             */
-/*   Updated: 2025/10/13 15:46:16 by saibelab         ###   ########.fr       */
+/*   Updated: 2025/10/13 16:36:23 by saibelab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,12 @@ void	ft_eat(t_philo *philo)
 {
 	int		first_fork;
 	int		second_fork;
-	long	timestamp;
 	int		forks_taken;
 
 	ft_get_forks(philo, &first_fork, &second_fork);
 	forks_taken = ft_take_forks(philo, first_fork, second_fork);
 	if (!forks_taken)
 		return ;
-	timestamp = get_rel_time(philo->simu);
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal = get_time_ms();
 	philo->meals_eaten++;

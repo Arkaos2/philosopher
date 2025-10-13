@@ -6,7 +6,7 @@
 /*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 18:23:11 by saibelab          #+#    #+#             */
-/*   Updated: 2025/10/13 15:45:05 by saibelab         ###   ########.fr       */
+/*   Updated: 2025/10/13 16:03:22 by saibelab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,20 +67,20 @@ int	main(int argc, char **argv)
 		printf("./philo nb_philo time_die time_eat time_sleep [nb_meal]\n");
 		return (-1);
 	}
-	simu = malloc(sizeof(t_simu));
+	gc = gc_new();
+	if (!gc)
+		return (-1);
+	simu = gc_malloc(gc, sizeof(t_simu));
 	if (!simu)
 		return (-1);
-	gc = gc_new();
 	simu->gc = gc;
 	if (init_args(simu, argv, argc) == -1)
 	{
-		free(simu);
 		gc_destroy(gc);
 		return (-1);
 	}
 	thread_launch(simu);
 	destroy_mutexes(simu);
-	free(simu);
 	gc_destroy(gc);
 	return (0);
 }
