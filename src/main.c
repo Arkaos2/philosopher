@@ -27,6 +27,7 @@ void	*monitor(void *arg)
 				return (NULL);
 			i++;
 		}
+		all_eaten(simu);
 		usleep(1000);
 	}
 	return (NULL);

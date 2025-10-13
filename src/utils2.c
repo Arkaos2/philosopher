@@ -21,34 +21,6 @@ void	handle_single_philo(t_philo *philo)
 	pthread_mutex_unlock(&philo->simu->forks[0]);
 }
 
-int	check_stop(t_simu *simu)
-{
-	int	stopped;
-
-	pthread_mutex_lock(&simu->stop_simu);
-	stopped = simu->stop;
-	pthread_mutex_unlock(&simu->stop_simu);
-	return (stopped);
-}
-
-void	handle_death(t_simu *simu, int i)
-{
-	int should_print;
-
-	pthread_mutex_lock(&simu->stop_simu);
-	should_print = !simu->stop;
-	simu->stop = 1;
-	pthread_mutex_unlock(&simu->stop_simu);
-
-	if (should_print)
-	{
-		pthread_mutex_lock(&simu->print_mutex);
-		printf("%ld %d died\n", get_rel_time(simu), simu->philos[i].id + 1);
-		pthread_mutex_unlock(&simu->print_mutex);
-	}
-	exit(EXIT_SUCCESS);
-}
-
 int	check_philo_death(t_simu *simu, int i)
 {
 	long	current_time;
@@ -67,11 +39,39 @@ int	check_philo_death(t_simu *simu, int i)
 }
 void	ft_die_check(t_philo *philo)
 {
+	int should_print;
+
 	pthread_mutex_lock(&philo->simu->stop_simu);
-	if (!philo->simu->stop)
-	{
-		philo->simu->stop = 1;
-		printf("%ld %d died\n", get_rel_time(philo->simu), philo->id);
-	}
+	should_print = !philo->simu->stop;
+	philo->simu->stop = 1;
 	pthread_mutex_unlock(&philo->simu->stop_simu);
+	if (should_print)
+	{
+		pthread_mutex_lock(&philo->simu->print_mutex);
+		printf("%ld %d died\n", get_rel_time(philo->simu), philo->id + 1);
+		pthread_mutex_unlock(&philo->simu->print_mutex);
+	}
+}
+void run_philo_loop(t_philo *philo)
+{
+	while (!ft_is_stopped(philo))
+	{
+		ft_eat(philo);
+		if (ft_is_stopped(philo))
+			break;
+		if (philo->simu->nb_must_eat != -1)
+		{
+			pthread_mutex_lock(&philo->meal_mutex);
+			if (philo->meals_eaten >= philo->simu->nb_must_eat)
+			{
+				pthread_mutex_unlock(&philo->meal_mutex);
+				break;
+			}
+			pthread_mutex_unlock(&philo->meal_mutex);
+		}
+		ft_sleep(philo);
+		if (ft_is_stopped(philo))
+			break;
+		ft_think(philo);
+	}
 }

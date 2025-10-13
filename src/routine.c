@@ -29,7 +29,7 @@ void	ft_eat(t_philo *philo)
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_mutex);
 	ft_print(philo, "is eating");
-	usleep(philo->simu->time_to_eat * 1000L);
+	sleep_interruptible(philo, philo->simu->time_to_eat);
 	pthread_mutex_unlock(&philo->simu->forks[first_fork]);
 	pthread_mutex_unlock(&philo->simu->forks[second_fork]);
 }
@@ -37,7 +37,7 @@ void	ft_eat(t_philo *philo)
 void	ft_sleep(t_philo *philo)
 {
 	ft_print(philo, "is sleeping");
-	usleep(philo->simu->time_to_sleep * 1000L);
+	sleep_interruptible(philo, philo->simu->time_to_sleep);
 }
 
 int	ft_is_stopped(t_philo *philo)
@@ -66,7 +66,7 @@ void	ft_think(t_philo *philo)
 	if (think_time < 0)
 		think_time = 0;
 	ft_print(philo, "is thinking");
-	usleep(think_time * 1000L);
+	sleep_interruptible(philo, think_time);
 }
 
 void	*routine(void *arg)
@@ -84,15 +84,6 @@ void	*routine(void *arg)
 		handle_single_philo(philo);
 		return (NULL);
 	}
-	while (!ft_is_stopped(philo))
-	{
-		ft_eat(philo);
-		if (ft_is_stopped(philo))
-			break;
-		ft_sleep(philo);
-		if (ft_is_stopped(philo))
-			break;
-		ft_think(philo);
-	}
+	run_philo_loop(philo);
 	return (NULL);
 }

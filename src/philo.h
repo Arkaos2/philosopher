@@ -50,6 +50,7 @@ typedef struct s_simu
 	long			time_to_die;
 	long			time_to_eat;
 	long			time_to_sleep;
+	long			nb_must_eat;
 	int				stop;
 	long			start_time;
 	pthread_mutex_t	stop_simu;
@@ -69,8 +70,10 @@ void		ft_eat(t_philo *philo);
 void		ft_sleep(t_philo *philo);
 void		ft_think(t_philo *philo);
 void		*routine(void *arg);
+void		run_philo_loop(t_philo *philo);
 void		thread_launch(t_simu *simu);
 void		*monitor(void *arg);
+void		all_eaten(t_simu *simu);
 
 void		ft_get_forks(t_philo *philo, int *first, int *second);
 int			ft_take_forks(t_philo *philo, int first, int second);
@@ -86,13 +89,15 @@ int			check_philo_death(t_simu *simu, int i);
 void		handle_death(t_simu *simu, int i);
 void		ft_die_check(t_philo *philo);
 
-int			init_forks(t_simu *simu);
+int			init_forks(t_simu *simu, char **argv, int argc);
 int			init_args(t_simu *simu, char **argv, int argc);
 int			all_number(int argc, char **argv);
 long		ft_atol(char *s);
 
 void		destroy_mutexes(t_simu *simu);
 void		ft_print(t_philo *philo, char *msg);
+
+void	sleep_interruptible(t_philo *philo, long duration_ms);
 
 #endif
 

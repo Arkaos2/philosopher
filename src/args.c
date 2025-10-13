@@ -47,7 +47,7 @@ long	ft_atol(char *s)
 	return (res);
 }
 
-int	init_forks(t_simu *simu)
+int	init_forks(t_simu *simu, char **argv, int argc)
 {
 	int	i;
 
@@ -72,26 +72,36 @@ int	init_forks(t_simu *simu)
 	return (0);
 }
 
-int	init_args(t_simu *simu, char **argv, int argc)
+static int parse_args(t_simu *simu, char **argv, int argc)
 {
-	int	i;
-
-	if(!all_number(argc, argv))
+	if (!all_number(argc, argv))
 	{
 		printf("Argument Invalide\n");
 		return (-1);
 	}
-	i = 0;
 	simu->nb_philo = (int)ft_atol(argv[1]);
 	simu->time_to_die = ft_atol(argv[2]);
 	simu->time_to_eat = ft_atol(argv[3]);
 	simu->time_to_sleep = ft_atol(argv[4]);
+	simu->nb_must_eat = -1;
+	if (argc == 6)
+		simu->nb_must_eat = ft_atol(argv[5]);
 	if (simu->nb_philo <= 0 || simu->time_to_die <= 0 ||
 		simu->time_to_eat <= 0 || simu->time_to_sleep <= 0)
 	{
-		printf("Arguments invalides: valeurs doivent être positives\n");
+		printf("Arguments invalides: valeurs doivent etre positives\n");
 		return (-1);
 	}
+	return (0);
+}
+
+int	init_args(t_simu *simu, char **argv, int argc)
+{
+	int i;
+
+	if (parse_args(simu, argv, argc) == -1)
+		return (-1);
+	i = 0;
 	simu->stop = 0;
 	simu->philos = gc_malloc(simu->gc, sizeof(t_philo) * simu->nb_philo);
 	if (!simu->philos)
@@ -103,6 +113,6 @@ int	init_args(t_simu *simu, char **argv, int argc)
 		simu->philos[i].simu = simu;
 		i++;
 	}
-	init_forks(simu);
+	init_forks(simu, argv, argc);
 	return (0);
 }
