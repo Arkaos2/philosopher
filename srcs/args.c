@@ -6,7 +6,7 @@
 /*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 17:38:27 by saibelab          #+#    #+#             */
-/*   Updated: 2025/10/08 15:40:55 by saibelab         ###   ########.fr       */
+/*   Updated: 2025/10/13 15:41:44 by saibelab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ int	all_number(int argc, char **argv)
 	int	j;
 
 	i = 1;
-	while(i < argc)
+	while (i < argc)
 	{
 		j = 0;
-		while(argv[i][j])
+		while (argv[i][j])
 		{
 			if (!(argv[i][j] <= '9' && argv[i][j] >= '0'))
 				return (0);
@@ -31,6 +31,7 @@ int	all_number(int argc, char **argv)
 	}
 	return (1);
 }
+
 long	ft_atol(char *s)
 {
 	int		i;
@@ -38,7 +39,7 @@ long	ft_atol(char *s)
 
 	i = 0;
 	res = 0;
-	while(s[i])
+	while (s[i])
 	{
 		res *= 10;
 		res += s[i] - '0';
@@ -47,7 +48,7 @@ long	ft_atol(char *s)
 	return (res);
 }
 
-int	init_forks(t_simu *simu, char **argv, int argc)
+int	init_forks(t_simu *simu)
 {
 	int	i;
 
@@ -55,7 +56,7 @@ int	init_forks(t_simu *simu, char **argv, int argc)
 	simu->forks = gc_malloc(simu->gc, sizeof(pthread_mutex_t) * simu->nb_philo);
 	if (!simu->forks)
 		return (-1);
-	while(i < simu->nb_philo)
+	while (i < simu->nb_philo)
 	{
 		pthread_mutex_init(&simu->forks[i], NULL);
 		i++;
@@ -68,11 +69,10 @@ int	init_forks(t_simu *simu, char **argv, int argc)
 		pthread_mutex_init(&simu->philos[i].meal_mutex, NULL);
 		i++;
 	}
-
 	return (0);
 }
 
-static int parse_args(t_simu *simu, char **argv, int argc)
+static int	parse_args(t_simu *simu, char **argv, int argc)
 {
 	if (!all_number(argc, argv))
 	{
@@ -86,8 +86,8 @@ static int parse_args(t_simu *simu, char **argv, int argc)
 	simu->nb_must_eat = -1;
 	if (argc == 6)
 		simu->nb_must_eat = ft_atol(argv[5]);
-	if (simu->nb_philo <= 0 || simu->time_to_die <= 0 ||
-		simu->time_to_eat <= 0 || simu->time_to_sleep <= 0)
+	if (simu->nb_philo <= 0 || simu->time_to_die <= 0
+		|| simu->time_to_eat <= 0 || simu->time_to_sleep <= 0)
 	{
 		printf("Arguments invalides: valeurs doivent etre positives\n");
 		return (-1);
@@ -97,7 +97,7 @@ static int parse_args(t_simu *simu, char **argv, int argc)
 
 int	init_args(t_simu *simu, char **argv, int argc)
 {
-	int i;
+	int	i;
 
 	if (parse_args(simu, argv, argc) == -1)
 		return (-1);
@@ -113,6 +113,6 @@ int	init_args(t_simu *simu, char **argv, int argc)
 		simu->philos[i].simu = simu;
 		i++;
 	}
-	init_forks(simu, argv, argc);
+	init_forks(simu);
 	return (0);
 }

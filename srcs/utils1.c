@@ -6,7 +6,7 @@
 /*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 15:41:56 by saibelab          #+#    #+#             */
-/*   Updated: 2025/10/08 16:21:25 by saibelab         ###   ########.fr       */
+/*   Updated: 2025/10/13 15:39:47 by saibelab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,11 @@ int	ft_take_forks(t_philo *philo, int first, int second)
 	ft_print(philo, "has taken a fork");
 	return (1);
 }
+
 long	get_time_ms(void)
 {
 	struct timeval	tv;
+
 	gettimeofday(&tv, NULL);
 	return (tv.tv_sec * 1000L + tv.tv_usec / 1000L);
 }

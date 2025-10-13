@@ -6,7 +6,7 @@
 /*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 16:24:35 by saibelab          #+#    #+#             */
-/*   Updated: 2025/10/08 16:21:10 by saibelab         ###   ########.fr       */
+/*   Updated: 2025/10/13 15:42:36 by saibelab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	destroy_mutexes(t_simu *simu)
 		}
 	}
 }
+
 int	check_stop(t_simu *simu)
 {
 	int	stopped;
@@ -49,13 +50,12 @@ int	check_stop(t_simu *simu)
 
 void	handle_death(t_simu *simu, int i)
 {
-	int should_print;
+	int	should_print;
 
 	pthread_mutex_lock(&simu->stop_simu);
 	should_print = !simu->stop;
 	simu->stop = 1;
 	pthread_mutex_unlock(&simu->stop_simu);
-
 	if (should_print)
 	{
 		pthread_mutex_lock(&simu->print_mutex);
@@ -64,7 +64,7 @@ void	handle_death(t_simu *simu, int i)
 	}
 }
 
-void all_eaten(t_simu *simu)
+void	all_eaten(t_simu *simu)
 {
 	int	i;
 	int	all_done;
@@ -93,7 +93,7 @@ void all_eaten(t_simu *simu)
 
 void	sleep_interruptible(t_philo *philo, long duration_ms)
 {
-	long start;
+	long	start;
 
 	start = get_time_ms();
 	while (!ft_is_stopped(philo) && (get_time_ms() - start) < duration_ms)

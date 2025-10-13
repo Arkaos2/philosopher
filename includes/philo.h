@@ -6,7 +6,7 @@
 /*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 17:37:01 by saibelab          #+#    #+#             */
-/*   Updated: 2025/10/08 16:28:17 by saibelab         ###   ########.fr       */
+/*   Updated: 2025/10/13 15:49:20 by saibelab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,18 @@
 # include <unistd.h>
 # include <sys/time.h>
 
-typedef struct	s_gcnode
+typedef struct s_gcnode
 {
-	void				*ptr;
-	struct	s_gcnode	*next;
-}						t_gcnode;
+	void			*ptr;
+	struct s_gcnode	*next;
+}					t_gcnode;
 
-typedef struct	s_gc
+typedef struct s_gc
 {
 	t_gcnode	*head;
 }				t_gc;
 
 typedef struct s_simu	t_simu;
-
-typedef struct s_philo
-{
-	int				id;
-	long			last_meal;
-	int				meals_eaten;
-	pthread_t		thread;
-	pthread_mutex_t	meal_mutex;
-	t_simu			*simu;
-}	t_philo;
 
 typedef struct s_simu
 {
@@ -89,7 +79,7 @@ int			check_philo_death(t_simu *simu, int i);
 void		handle_death(t_simu *simu, int i);
 void		ft_die_check(t_philo *philo);
 
-int			init_forks(t_simu *simu, char **argv, int argc);
+int			init_forks(t_simu *simu);
 int			init_args(t_simu *simu, char **argv, int argc);
 int			all_number(int argc, char **argv);
 long		ft_atol(char *s);
@@ -97,7 +87,6 @@ long		ft_atol(char *s);
 void		destroy_mutexes(t_simu *simu);
 void		ft_print(t_philo *philo, char *msg);
 
-void	sleep_interruptible(t_philo *philo, long duration_ms);
+void		sleep_interruptible(t_philo *philo, long duration_ms);
 
 #endif
-

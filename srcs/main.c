@@ -6,7 +6,7 @@
 /*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/02 18:23:11 by saibelab          #+#    #+#             */
-/*   Updated: 2025/10/08 16:20:56 by saibelab         ###   ########.fr       */
+/*   Updated: 2025/10/13 15:45:05 by saibelab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	*monitor(void *arg)
 
 void	thread_launch(t_simu *simu)
 {
-	int	i;
+	int			i;
 	pthread_t	monitor_thread;
 
 	simu->start_time = get_time_ms();
@@ -43,7 +43,8 @@ void	thread_launch(t_simu *simu)
 	while (i < simu->nb_philo)
 	{
 		simu->philos[i].last_meal = simu->start_time;
-		pthread_create(&simu->philos[i].thread, NULL, routine, &simu->philos[i]);
+		pthread_create(&simu->philos[i].thread, NULL,
+			routine, &simu->philos[i]);
 		i++;
 	}
 	pthread_create(&monitor_thread, NULL, monitor, simu);
@@ -56,14 +57,14 @@ void	thread_launch(t_simu *simu)
 	pthread_join(monitor_thread, NULL);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_simu *simu;
-	t_gc *gc;
+	t_simu	*simu;
+	t_gc	*gc;
 
 	if (argc != 5 && argc != 6)
 	{
-		printf("Usage: ./philo nb_philo time_to_die time_to_eat time_to_sleep [nb_meals]\n");
+		printf("./philo nb_philo time_die time_eat time_sleep [nb_meal]\n");
 		return (-1);
 	}
 	simu = malloc(sizeof(t_simu));
@@ -81,5 +82,5 @@ int main(int argc, char **argv)
 	destroy_mutexes(simu);
 	free(simu);
 	gc_destroy(gc);
-	return(0);
+	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 15:42:52 by saibelab          #+#    #+#             */
-/*   Updated: 2025/10/08 16:25:30 by saibelab         ###   ########.fr       */
+/*   Updated: 2025/10/13 15:47:04 by saibelab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,10 @@ int	check_philo_death(t_simu *simu, int i)
 	}
 	return (0);
 }
+
 void	ft_die_check(t_philo *philo)
 {
-	int should_print;
+	int	should_print;
 
 	pthread_mutex_lock(&philo->simu->stop_simu);
 	should_print = !philo->simu->stop;
@@ -52,26 +53,27 @@ void	ft_die_check(t_philo *philo)
 		pthread_mutex_unlock(&philo->simu->print_mutex);
 	}
 }
-void run_philo_loop(t_philo *philo)
+
+void	run_philo_loop(t_philo *philo)
 {
 	while (!ft_is_stopped(philo))
 	{
 		ft_eat(philo);
 		if (ft_is_stopped(philo))
-			break;
+			break ;
 		if (philo->simu->nb_must_eat != -1)
 		{
 			pthread_mutex_lock(&philo->meal_mutex);
 			if (philo->meals_eaten >= philo->simu->nb_must_eat)
 			{
 				pthread_mutex_unlock(&philo->meal_mutex);
-				break;
+				break ;
 			}
 			pthread_mutex_unlock(&philo->meal_mutex);
 		}
 		ft_sleep(philo);
 		if (ft_is_stopped(philo))
-			break;
+			break ;
 		ft_think(philo);
 	}
 }
