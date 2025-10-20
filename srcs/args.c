@@ -99,9 +99,9 @@ int	init_args(t_simu *simu, char **argv, int argc)
 {
 	int	i;
 
+	i = 0;
 	if (parse_args(simu, argv, argc) == -1)
 		return (-1);
-	i = 0;
 	simu->stop = 0;
 	simu->philos = gc_malloc(simu->gc, sizeof(t_philo) * simu->nb_philo);
 	if (!simu->philos)
@@ -113,6 +113,10 @@ int	init_args(t_simu *simu, char **argv, int argc)
 		simu->philos[i].simu = simu;
 		i++;
 	}
-	init_forks(simu);
+	if (init_forks(simu) == -1)
+	{
+		printf("Failed to initialize forks\n");
+		return (-1);
+	}
 	return (0);
 }

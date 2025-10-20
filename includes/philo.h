@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   includes/philo.h                                            :+:      :+:    :+:   */
+/*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: saibelab <saibelab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/02 17:37:01 by saibelab          #+#    #+#             */
-/*   Updated: 2025/10/13 15:56:48 by saibelab         ###   ########.fr       */
+/*   Created: 2025/10/20 15:40:38 by saibelab          #+#    #+#             */
+/*   Updated: 2025/10/20 15:40:43 by saibelab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void		ft_sleep(t_philo *philo);
 void		ft_think(t_philo *philo);
 void		*routine(void *arg);
 void		run_philo_loop(t_philo *philo);
-void		thread_launch(t_simu *simu);
+int			thread_launch(t_simu *simu);
 void		*monitor(void *arg);
 void		all_eaten(t_simu *simu);
 
